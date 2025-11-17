@@ -1,35 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = ({ onNavigate, currentPage }) => {
+const Navbar = ({ currentPage }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const navItems = [
+    { path: '/', label: 'Home', icon: '🏠' },
+    { path: '/tasks', label: 'Tasks', icon: '✓' },
+    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+    { path: '/calendar', label: 'Calendar', icon: '📅' },
+    { path: '/settings', label: 'Settings', icon: '⚙️' }
+  ];
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="navbar-brand">
+        <Link to="/" className="navbar-brand">
           <span className="brand-icon">🎤</span>
           <span className="brand-text">VoiceTodo</span>
-        </div>
+        </Link>
         
-        <div className="navbar-menu">
-          {currentPage === 'app' ? (
-            <button 
-              className="nav-button"
-              onClick={() => onNavigate('landing')}
-              title="Back to Home"
+        <button 
+          className="menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
+
+        <div className={`navbar-menu ${menuOpen ? 'open' : ''}`}>
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
+              onClick={() => setMenuOpen(false)}
             >
-              <span className="nav-icon">🏠</span>
-              <span className="nav-text">Home</span>
-            </button>
-          ) : (
-            <button 
-              className="nav-button primary"
-              onClick={() => onNavigate('app')}
-              title="Go to Tasks"
-            >
-              <span className="nav-icon">✓</span>
-              <span className="nav-text">My Tasks</span>
-            </button>
-          )}
+              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-text">{item.label}</span>
+            </Link>
+          ))}
         </div>
       </div>
     </nav>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import TodoList from './components/TodoList';
 import VoiceControl from './components/VoiceControl';
@@ -6,24 +7,23 @@ import AddTaskForm from './components/AddTaskForm';
 import LandingPage from './components/LandingPage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
+import Calendar from './pages/Calendar';
 
-function App() {
+// Main App Component with Task State Management
+function AppContent() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [tasks, setTasks] = useState([]);
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const [showLanding, setShowLanding] = useState(true);
-  const [currentPage, setCurrentPage] = useState('landing');
 
   // Load tasks from localStorage on mount
   useEffect(() => {
     const savedTasks = localStorage.getItem('voiceTasks');
     if (savedTasks) {
       setTasks(JSON.parse(savedTasks));
-    }
-    
-    const hasVisited = localStorage.getItem('hasVisitedBefore');
-    if (hasVisited) {
-      setShowLanding(false);
     }
   }, []);
 
@@ -62,80 +62,78 @@ function App() {
   };
 
   const handleGetStarted = () => {
-    setShowLanding(false);
-    setCurrentPage('app');
     localStorage.setItem('hasVisitedBefore', 'true');
+    navigate('/tasks');
   };
 
-  const handleNavigation = (page) => {
-    if (page === 'landing') {
-      setShowLanding(true);
-      setCurrentPage('landing');
-    } else {
-      setShowLanding(false);
-      setCurrentPage('app');
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  // Tasks Page Component
+  const TasksPage = () => (
+    <div className="App">
+      <div className="container">
+        <header className="app-header">
+          <h1>🎤 Voice Controlled To-Do</h1>
+          <p className="subtitle">Speak or type to manage your tasks</p>
+        </header>
 
-  if (showLanding) {
-    return (
-      <div className="app-wrapper">
-        <Navbar onNavigate={handleNavigation} currentPage="landing" />
-        <LandingPage onGetStarted={handleGetStarted} />
-        <Footer currentPage="landing" />
-      </div>
-    );
-  }
+        <VoiceControl 
+          addTask={addTask}
+          deleteTask={deleteTask}
+          deleteAllTasks={deleteAllTasks}
+          deleteCompletedTasks={deleteCompletedTasks}
+          tasks={tasks}
+          isListening={isListening}
+          setIsListening={setIsListening}
+          transcript={transcript}
+          setTranscript={setTranscript}
+        />
 
-  return (
-    <div className="app-wrapper">
-      <Navbar onNavigate={handleNavigation} currentPage="app" />
-      <div className="App">
-        <div className="container">
-          <header className="app-header">
-            <h1>🎤 Voice Controlled To-Do</h1>
-            <p className="subtitle">Speak or type to manage your tasks</p>
-          </header>
+        <AddTaskForm addTask={addTask} />
 
-          <VoiceControl 
-            addTask={addTask}
-            deleteTask={deleteTask}
-            deleteAllTasks={deleteAllTasks}
-            deleteCompletedTasks={deleteCompletedTasks}
-            tasks={tasks}
-            isListening={isListening}
-            setIsListening={setIsListening}
-            transcript={transcript}
-            setTranscript={setTranscript}
-          />
+        <TodoList 
+          tasks={tasks}
+          deleteTask={deleteTask}
+          toggleTask={toggleTask}
+        />
 
-          <AddTaskForm addTask={addTask} />
-
-          <TodoList 
-            tasks={tasks}
-            deleteTask={deleteTask}
-            toggleTask={toggleTask}
-          />
-
-          <div className="stats">
-            <div className="stat-item">
-              <span className="stat-number">{tasks.length}</span>
-              <span className="stat-label">Total Tasks</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-number">{tasks.filter(t => t.completed).length}</span>
-              <span className="stat-label">Completed</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-number">{tasks.filter(t => !t.completed).length}</span>
-              <span className="stat-label">Pending</span>
-            </div>
+        <div className="stats">
+          <div className="stat-item">
+            <span className="stat-number">{tasks.length}</span>
+            <span className="stat-label">Total Tasks</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">{tasks.filter(t => t.completed).length}</span>
+            <span className="stat-label">Completed</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">{tasks.filter(t => !t.completed).length}</span>
+            <span className="stat-label">Pending</span>
           </div>
         </div>
       </div>
-      <Footer currentPage="app" />
     </div>
+  );
+
+  return (
+    <div className="app-wrapper">
+      <Navbar currentPage={location.pathname} />
+      <Routes>
+        <Route path="/" element={<LandingPage onGetStarted={handleGetStarted} />} />
+        <Route path="/tasks" element={<TasksPage />} />
+        <Route path="/dashboard" element={<Dashboard tasks={tasks} />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/calendar" element={<Calendar tasks={tasks} />} />
+      </Routes>
+      <Footer currentPage={location.pathname} />
+    </div>
+  );
+}
+
+// Root App Component with Router
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 
