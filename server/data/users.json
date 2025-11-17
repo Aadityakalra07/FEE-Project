@@ -1,0 +1,18 @@
+[
+  {
+    "id": "user_1763402310120",
+    "name": "Dishu",
+    "email": "singladishu815@gmail.com",
+    "password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+    "createdAt": "2025-11-17T17:58:30.121Z",
+    "avatar": null
+  },
+  {
+    "id": "user_1763402495562",
+    "name": "aryan",
+    "email": "aryan0864@gmail.com",
+    "password": "a95abed9bd68df2517f36779e5dcc17a682b117ba2cf9004edf769398770014e",
+    "createdAt": "2025-11-17T18:01:35.562Z",
+    "avatar": null
+  }
+]

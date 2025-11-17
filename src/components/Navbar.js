@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import Profile from './Profile';
 import './Navbar.css';
 
 const Navbar = ({ currentPage }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const location = useLocation();
 
   const navItems = [
@@ -46,8 +48,20 @@ const Navbar = ({ currentPage }) => {
               <span className="nav-text">{item.label}</span>
             </Link>
           ))}
+          <button 
+            className="nav-link profile-btn"
+            onClick={() => {
+              setShowProfile(true);
+              setMenuOpen(false);
+            }}
+            title="My Profile"
+          >
+            <span className="user-avatar">👤</span>
+            <span className="nav-text">Profile</span>
+          </button>
         </div>
       </div>
+      {showProfile && <Profile onClose={() => setShowProfile(false)} />}
     </nav>
   );
 };
