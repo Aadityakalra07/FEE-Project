@@ -24,7 +24,6 @@ function AppContent() {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [showAuth, setShowAuth] = useState('login'); // 'login' or 'signup'
-  const [showProfile, setShowProfile] = useState(false);
 
   const API_URL = 'http://localhost:5000/api';
 
@@ -32,11 +31,8 @@ function AppContent() {
   useEffect(() => {
     if (isAuthenticated && sessionId) {
       loadTasksFromServer();
-      const hasVisited = localStorage.getItem('hasVisitedBefore');
-      if (hasVisited) {
-        setShowLanding(false);
-      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, sessionId]);
 
   // Save tasks to server whenever they change
@@ -44,6 +40,7 @@ function AppContent() {
     if (isAuthenticated && sessionId && tasks.length >= 0) {
       saveTasksToServer();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tasks]);
 
   const loadTasksFromServer = async () => {
