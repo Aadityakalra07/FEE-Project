@@ -1,8 +1,13 @@
 .settings-page {
   flex: 1;
-  padding: 100px 20px 40px;
+  padding: 40px 40px 40px 320px;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: 100vh;
+  transition: padding-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.sidebar-closed .settings-page {
+  padding-left: 120px;
 }
 
 .settings-container {
@@ -302,7 +307,11 @@ body.dark-theme .theme-btn:hover {
 /* Responsive */
 @media (max-width: 768px) {
   .settings-page {
-    padding: 80px 15px 30px;
+    padding: 40px 15px 30px 15px;
+  }
+
+  body.sidebar-closed .settings-page {
+    padding-left: 15px;
   }
 
   .settings-header h1 {

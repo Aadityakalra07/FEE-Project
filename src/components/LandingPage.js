@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './LandingPage.css';
+import Footer from './Footer';
 
 const LandingPage = ({ onGetStarted }) => {
   const [currentFeature, setCurrentFeature] = useState(0);
@@ -327,6 +328,7 @@ const LandingPage = ({ onGetStarted }) => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

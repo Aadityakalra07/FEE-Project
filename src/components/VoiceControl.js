@@ -10,7 +10,8 @@ const VoiceControl = ({
   isListening, 
   setIsListening, 
   transcript, 
-  setTranscript 
+  setTranscript,
+  settings = {} 
 }) => {
   const recognitionRef = useRef(null);
 
@@ -126,6 +127,9 @@ const VoiceControl = ({
   };
 
   const speak = (text) => {
+    // Only speak if voice feedback is enabled in settings
+    if (settings.voiceFeedback === false) return;
+    
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 1;
     utterance.pitch = 1;

@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import './Dashboard.css';
+import Footer from '../components/Footer';
 
 const Dashboard = ({ tasks }) => {
   const stats = useMemo(() => {
@@ -206,6 +207,7 @@ const Dashboard = ({ tasks }) => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

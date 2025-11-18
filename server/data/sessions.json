@@ -10,5 +10,11 @@
     "userId": "user_1763402310120",
     "createdAt": "2025-11-17T18:28:26.479Z",
     "expiresAt": "2025-11-24T18:28:26.479Z"
+  },
+  {
+    "sessionId": "bc37aab2ab334a964ee5e2a44d4dd6694d30599cdf7cfc13bbb1cdf4c78680f9",
+    "userId": "user_1763449152487",
+    "createdAt": "2025-11-18T06:59:12.489Z",
+    "expiresAt": "2025-11-25T06:59:12.489Z"
   }
 ]

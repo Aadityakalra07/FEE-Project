@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import './Calendar.css';
+import Footer from '../components/Footer';
 
 const Calendar = ({ tasks }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -271,6 +272,7 @@ const Calendar = ({ tasks }) => {
           {view === 'day' && renderDayView()}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -42,16 +42,16 @@ const Footer = ({ currentPage }) => {
             <h4 className="section-title">Connect</h4>
             <div className="social-links">
               <a href="#" className="social-icon" aria-label="GitHub">
-                <span>💻</span>
+                <span><i class="fa-brands fa-github"></i></span>
               </a>
               <a href="#" className="social-icon" aria-label="Twitter">
-                <span>🐦</span>
+                <span><i class="fa-brands fa-x-twitter"></i></span>
               </a>
               <a href="#" className="social-icon" aria-label="LinkedIn">
-                <span>💼</span>
+                <span><i class="fa-brands fa-square-linkedin"></i></span>
               </a>
               <a href="#" className="social-icon" aria-label="Email">
-                <span>📧</span>
+                <span><i class="fa-solid fa-envelope"></i></span>
               </a>
             </div>
           </div>

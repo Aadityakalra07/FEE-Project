@@ -11,8 +11,16 @@
     "id": "user_1763402495562",
     "name": "aryan",
     "email": "aryan0864@gmail.com",
-    "password": "a95abed9bd68df2517f36779e5dcc17a682b117ba2cf9004edf769398770014e",
+    "passworda": "a95abed9bd68df2517f36779e5dcc17a682b117ba2cf9004edf769398770014e",
     "createdAt": "2025-11-17T18:01:35.562Z",
+    "avatar": null
+  },
+  {
+    "id": "user_1763449152487",
+    "name": "Aryan Garg",
+    "email": "aryangarg699@gmail.com",
+    "password": "5c80565db6f29da0b01aa12522c37b32f121cbe47a861ef7f006cb22922dffa1",
+    "createdAt": "2025-11-18T06:59:12.487Z",
     "avatar": null
   }
 ]

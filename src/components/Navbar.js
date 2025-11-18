@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Profile from './Profile';
 import './Navbar.css';
 
 const Navbar = ({ currentPage }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
 
   const navItems = [
@@ -21,48 +19,51 @@ const Navbar = ({ currentPage }) => {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-icon">🎤</span>
-          <span className="brand-text">VoiceTodo</span>
-        </Link>
-        
-        <button 
-          className="menu-toggle"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? '✕' : '☰'}
-        </button>
+    <>
+      <button 
+        className="sidebar-toggle"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Toggle sidebar"
+      >
+        <i className={`fas fa-${sidebarOpen ? 'times' : 'bars'}`}></i>
+      </button>
 
-        <div className={`navbar-menu ${menuOpen ? 'open' : ''}`}>
+      <aside className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
+        <div className="sidebar-header">
+          <Link to="/" className="sidebar-brand">
+            <span className="brand-icon">🎤</span>
+            {sidebarOpen && <span className="brand-text">VoiceTodo</span>}
+          </Link>
+        </div>
+
+        <nav className="sidebar-nav">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
-              onClick={() => setMenuOpen(false)}
+              className={`sidebar-link ${isActive(item.path) ? 'active' : ''}`}
+              title={!sidebarOpen ? item.label : ''}
             >
-              <span className="nav-icon">{item.icon}</span>
-              <span className="nav-text">{item.label}</span>
+              <span className="link-icon">{item.icon}</span>
+              {sidebarOpen && <span className="link-text">{item.label}</span>}
             </Link>
           ))}
-          <button 
-            className="nav-link profile-btn"
-            onClick={() => {
-              setShowProfile(true);
-              setMenuOpen(false);
-            }}
-            title="My Profile"
+        </nav>
+
+        <div className="sidebar-footer">
+          <Link
+            to="/profile"
+            className={`sidebar-link profile-link ${isActive('/profile') ? 'active' : ''}`}
+            title={!sidebarOpen ? 'Profile' : ''}
           >
             <span className="user-avatar">👤</span>
-            <span className="nav-text">Profile</span>
-          </button>
+            {sidebarOpen && <span className="link-text">Profile</span>}
+          </Link>
         </div>
-      </div>
-      {showProfile && <Profile onClose={() => setShowProfile(false)} />}
-    </nav>
+      </aside>
+
+      <div className={`sidebar-overlay ${sidebarOpen ? 'visible' : ''}`} onClick={() => setSidebarOpen(false)}></div>
+    </>
   );
 };
 

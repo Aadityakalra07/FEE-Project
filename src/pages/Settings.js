@@ -1,56 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Settings.css';
+import Footer from '../components/Footer';
+import { useSettings } from '../context/SettingsContext';
 
 const Settings = () => {
-  const [settings, setSettings] = useState({
-    theme: 'light',
-    notifications: true,
-    voiceFeedback: true,
-    autoDelete: false,
-    sortBy: 'createdAt',
-    showCompleted: true
-  });
-
-  useEffect(() => {
-    const saved = localStorage.getItem('app-settings');
-    if (saved) {
-      setSettings(JSON.parse(saved));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('app-settings', JSON.stringify(settings));
-    
-    // Apply theme
-    if (settings.theme === 'dark') {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.remove('dark-theme');
-    }
-  }, [settings]);
+  const { settings, updateSetting, resetSettings, showNotification } = useSettings();
 
   const handleChange = (key, value) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+    updateSetting(key, value);
+    showNotification('Settings Updated', `${key} has been changed`);
   };
 
   const handleReset = () => {
     if (window.confirm('Are you sure you want to reset all settings to default?')) {
-      const defaultSettings = {
-        theme: 'light',
-        notifications: true,
-        voiceFeedback: true,
-        autoDelete: false,
-        sortBy: 'createdAt',
-        showCompleted: true
-      };
-      setSettings(defaultSettings);
+      resetSettings();
+      showNotification('Settings Reset', 'All settings have been restored to default');
     }
   };
 
   const handleClearData = () => {
     if (window.confirm('This will delete all your tasks. Are you sure?')) {
       localStorage.removeItem('todos');
-      alert('All tasks have been cleared!');
+      showNotification('Data Cleared', 'All tasks have been deleted');
+      window.location.reload(); // Reload to reflect changes
     }
   };
 
@@ -69,6 +41,7 @@ const Settings = () => {
     link.download = `voicetodo-backup-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
     URL.revokeObjectURL(url);
+    showNotification('Export Complete', 'Your tasks have been exported');
   };
 
   return (
@@ -78,31 +51,6 @@ const Settings = () => {
           <h1>⚙️ Settings</h1>
           <p className="settings-subtitle">Customize your experience</p>
         </header>
-
-        {/* Appearance */}
-        <div className="settings-section">
-          <h2 className="section-title">🎨 Appearance</h2>
-          <div className="setting-item">
-            <div className="setting-info">
-              <label>Theme</label>
-              <p className="setting-description">Choose your preferred color scheme</p>
-            </div>
-            <div className="theme-selector">
-              <button
-                className={`theme-btn ${settings.theme === 'light' ? 'active' : ''}`}
-                onClick={() => handleChange('theme', 'light')}
-              >
-                ☀️ Light
-              </button>
-              <button
-                className={`theme-btn ${settings.theme === 'dark' ? 'active' : ''}`}
-                onClick={() => handleChange('theme', 'dark')}
-              >
-                🌙 Dark
-              </button>
-            </div>
-          </div>
-        </div>
 
         {/* Notifications */}
         <div className="settings-section">
@@ -247,6 +195,7 @@ const Settings = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -12,14 +12,16 @@ import Settings from './pages/Settings';
 import Calendar from './pages/Calendar';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Profile from './components/Profile';
+import ProfilePage from './pages/ProfilePage';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { useSettings } from './context/SettingsContext';
 
 // Main App Component with Task State Management
 function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, sessionId, loading, isAuthenticated } = useAuth();
+  const { settings, showNotification } = useSettings();
   const [tasks, setTasks] = useState([]);
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -42,6 +44,31 @@ function AppContent() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tasks]);
+
+  // Auto-delete completed tasks older than 7 days
+  useEffect(() => {
+    if (!settings.autoDelete || tasks.length === 0) return;
+
+    const interval = setInterval(() => {
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+      const filteredTasks = tasks.filter(task => {
+        if (task.completed && task.createdAt) {
+          const taskDate = new Date(task.createdAt);
+          return taskDate > sevenDaysAgo;
+        }
+        return true;
+      });
+
+      if (filteredTasks.length < tasks.length) {
+        setTasks(filteredTasks);
+        showNotification('Auto-Delete', 'Removed completed tasks older than 7 days');
+      }
+    }, 3600000); // Check every hour
+
+    return () => clearInterval(interval);
+  }, [tasks, settings.autoDelete, showNotification]);
 
   const loadTasksFromServer = async () => {
     try {
@@ -80,24 +107,38 @@ function AppContent() {
       createdAt: new Date().toISOString()
     };
     setTasks([...tasks, newTask]);
+    showNotification('Task Added', taskText);
   };
 
   const deleteTask = (id) => {
+    const task = tasks.find(t => t.id === id);
     setTasks(tasks.filter(task => task.id !== id));
+    if (task) showNotification('Task Deleted', task.text);
   };
 
   const toggleTask = (id) => {
+    const task = tasks.find(t => t.id === id);
     setTasks(tasks.map(task => 
       task.id === id ? { ...task, completed: !task.completed } : task
     ));
+    if (task) {
+      showNotification(
+        task.completed ? 'Task Uncompleted' : 'Task Completed', 
+        task.text
+      );
+    }
   };
 
   const deleteAllTasks = () => {
+    const count = tasks.length;
     setTasks([]);
+    showNotification('All Tasks Deleted', `Removed ${count} tasks`);
   };
 
   const deleteCompletedTasks = () => {
+    const completedCount = tasks.filter(task => task.completed).length;
     setTasks(tasks.filter(task => !task.completed));
+    showNotification('Completed Tasks Deleted', `Removed ${completedCount} tasks`);
   };
 
   const handleGetStarted = () => {
@@ -164,6 +205,7 @@ function AppContent() {
           setIsListening={setIsListening}
           transcript={transcript}
           setTranscript={setTranscript}
+          settings={settings}
         />
 
         <AddTaskForm addTask={addTask} />
@@ -172,6 +214,7 @@ function AppContent() {
           tasks={tasks}
           deleteTask={deleteTask}
           toggleTask={toggleTask}
+          settings={settings}
         />
 
         <div className="stats">
@@ -201,8 +244,8 @@ function AppContent() {
         <Route path="/dashboard" element={<Dashboard tasks={tasks} />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/calendar" element={<Calendar tasks={tasks} />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
-      <Footer currentPage={location.pathname} />
     </div>
   );
 }

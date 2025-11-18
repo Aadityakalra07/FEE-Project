@@ -1,8 +1,13 @@
 .calendar-page {
   flex: 1;
-  padding: 100px 20px 40px;
+  padding: 40px 40px 40px 320px;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: 100vh;
+  transition: padding-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.sidebar-closed .calendar-page {
+  padding-left: 120px;
 }
 
 .calendar-container {
@@ -473,7 +478,11 @@
 
 @media (max-width: 768px) {
   .calendar-page {
-    padding: 80px 10px 30px;
+    padding: 40px 10px 30px 10px;
+  }
+
+  body.sidebar-closed .calendar-page {
+    padding-left: 10px;
   }
 
   .calendar-header {

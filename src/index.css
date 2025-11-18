@@ -4,6 +4,29 @@
   box-sizing: border-box;
 }
 
+:root {
+  --primary-teal: #0d9488;
+  --primary-teal-light: #14b8a6;
+  --primary-green: #22c55e;
+  --primary-green-light: #4ade80;
+  --dark-slate: #0f172a;
+  --dark-blue: #1e293b;
+  --gray-light: #f8fafc;
+  --gray-medium: #cbd5e1;
+  --white: #ffffff;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.24);
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -12,9 +35,58 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #14b8a6 0%, #22c55e 100%);
+  background-clip: content-box;
+}
+
+/* Selection */
+::selection {
+  background: rgba(13, 148, 136, 0.3);
+  color: #0f172a;
+}
+
+::-moz-selection {
+  background: rgba(13, 148, 136, 0.3);
+  color: #0f172a;
+}
+
+/* Focus Styles */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--primary-teal);
+  outline-offset: 2px;
+}
+
