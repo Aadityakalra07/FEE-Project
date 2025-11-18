@@ -1,0 +1,15 @@
+# Render Blueprint
+# Learn more: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: voice-todo-app
+    runtime: node
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && cd server && npm install && cd .. && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
