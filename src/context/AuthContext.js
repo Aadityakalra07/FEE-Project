@@ -15,7 +15,10 @@ export const AuthProvider = ({ children }) => {
   const [sessionId, setSessionId] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = 'http://localhost:5000/api';
+  // Use relative API URLs in production (same domain as frontend)
+  const API_URL = process.env.NODE_ENV === 'production' 
+    ? '/api' 
+    : 'http://localhost:5000/api';
 
   useEffect(() => {
     // Check for existing session
