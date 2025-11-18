@@ -11,9 +11,6 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from React build
-app.use(express.static(path.join(__dirname, '../build')));
-
 // File paths
 const USERS_FILE = path.join(__dirname, 'data', 'users.json');
 const TASKS_FILE = path.join(__dirname, 'data', 'tasks.json');
@@ -247,6 +244,9 @@ app.post('/api/tasks/save', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
+// Serve static files from React build (AFTER all API routes)
+app.use(express.static(path.join(__dirname, '../build')));
 
 // Serve React app for all other routes
 app.get('*', (req, res) => {

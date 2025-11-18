@@ -27,7 +27,10 @@ function AppContent() {
   const [transcript, setTranscript] = useState('');
   const [showAuth, setShowAuth] = useState('login'); // 'login' or 'signup'
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  // Use relative API URLs in production (same domain as frontend)
+  const API_URL = process.env.NODE_ENV === 'production' 
+    ? '/api' 
+    : 'http://localhost:5000/api';
 
   // Load tasks from server when user is authenticated
   useEffect(() => {
